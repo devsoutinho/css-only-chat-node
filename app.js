@@ -1,7 +1,7 @@
-const http = require('http');
-const EventEmitter = require('events');
-const Cache = require('./cache');
-const {
+import http from 'http';
+import EventEmitter from 'events';
+import { Cache } from './cache.js';
+import {
     PORT,
     LETTERS,
     SEND_LETTER,
@@ -9,7 +9,7 @@ const {
     STYLE_TEXT,
     INTRO_HTML,
     PRESS_EVENT
-} = require('./util');
+} from './util.js';
 
 const cache = new Cache();
 const msgList = [];
@@ -27,12 +27,12 @@ function createPanel(id, current = '') {
             <button class="btn btn_${prefix}">${letter}</button>
         `;
     };
-    const msgListHtml = () => msgList.reduce((prev, item) => `${prev}<li>${item.id}: ${item.msg}</li>`, '');
+    const msgListHtml = () => msgList.reduce((prev, item) => `${prev}<li><span class="user" style="background:#${item.id}">${item.id}</span>: ${item.msg}</li>`, '');
 
     const sendBtnHTML = `
         <div class="send-block">
             <style>.send_${now}:active { background-image: url('/send-${now}_${id}') }</style>
-            <button class="send send_${now}">send</button>
+            <button class="send send_${now}">💬 Send</button>
         </div>
     `;
     const keysStyle = current ? `<style>.main_${prev}{display: none;}</style>` : '';
@@ -42,9 +42,18 @@ function createPanel(id, current = '') {
     return `
         ${keysStyle}
         <div class="main main_${now}">
-            ${LETTERS.map(createKey).join('')}
+            <div class="keyboard">
+              ${LETTERS.map(createKey).join('')}
+            </div>
             ${sendBtnHTML}
-            <div>Current Message: ${currentText === SEND_LETTER ? '' : currentText}</div>
+            <div>
+              <h2>
+                Current Message:
+              </h2>
+              <p>
+                ${currentText === SEND_LETTER ? '' : currentText}
+              </p>
+            </div>
             ${msgHTML ? '<div>Message List:</div>' : ''}
             <ul>${msgHTML}</ul>
         </div>
@@ -67,7 +76,7 @@ const app = http.createServer((req, res) => {
         res.statusCode = 200;
         res.setHeader('connection', 'keep-alive');
         res.setHeader('content-type', 'text/html; charset=utf-8');
-        res.write(INTRO_HTML.replace('%id%', `#${clientId}`));
+        res.write(INTRO_HTML.replaceAll('%id%', `#${clientId}`));
         res.write(createPanel(clientId));
 
         event.addListener(PRESS_EVENT, send);

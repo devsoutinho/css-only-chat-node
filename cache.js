@@ -1,6 +1,6 @@
-const {SEND_LETTER} = require('./util');
+import { SEND_LETTER } from './util.js';
 
-class Cache {
+export class Cache {
     constructor() {
         this.msg = new Map();
         this.history = new Map();
@@ -35,5 +35,3 @@ class Cache {
         return this.history.get(id);
     }
 }
-
-module.exports = Cache;
