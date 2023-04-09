@@ -27,7 +27,7 @@ function createPanel(id, current = '') {
             <button class="btn btn_${prefix}">${letter}</button>
         `;
     };
-    const msgListHtml = () => msgList.reduce((prev, item) => `${prev}<li><span class="user" style="background:#${item.id}">${item.id}</span>: ${item.msg}</li>`, '');
+    const msgListHtml = () => msgList.reduce((prev, item) => `${prev}<li><span class="user" style="background:#${item.id}">#${item.id}</span>: ${item.msg}</li>`, '');
 
     const sendBtnHTML = `
         <div class="send-block">
