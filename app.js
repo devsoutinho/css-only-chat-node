@@ -24,7 +24,7 @@ function createPanel(id, current = '') {
         const prefix = now ? `${now}-${letter}` : letter;
         return `
             <style>.btn_${prefix}:active { background-image: url('/keys/${prefix}_${id}_${letter}') }</style>
-            <button class="btn btn_${prefix}">${letter}</button>
+            <button class="btn btn_${prefix}" style="grid-area: ${letter};">${letter}</button>
         `;
     };
     const msgListHtml = () => msgList.reduce((prev, item) => `${prev}<li><span class="user" style="background:#${item.id}">#${item.id}</span>: ${item.msg}</li>`, '');
@@ -54,8 +54,10 @@ function createPanel(id, current = '') {
                 ${currentText === SEND_LETTER ? '' : currentText}
               </p>
             </div>
-            ${msgHTML ? '<div>Message List:</div>' : ''}
-            <ul>${msgHTML}</ul>
+            ${msgHTML ? '<h2>Message List:</h2>' : ''}
+            <ul style="max-width: 300px; text-align: left; margin: auto;">
+              ${msgHTML}
+            </ul>
         </div>
     `;
 }
@@ -81,10 +83,16 @@ const app = http.createServer((req, res) => {
 
         event.addListener(PRESS_EVENT, send);
         req.socket.on('close', () => event.removeListener(PRESS_EVENT, send));
+
+        // 3) The connection NEVER ENDS
+        // res.end();
         return;
     }
 
     if (/^\/send-/.test(req.url)) {
+        // 2) ============== 
+        console.log("2) CSS :active on send sends the message", req.url);
+        // =================
         const clientId = req.url.split('_')[1];
         const msg = cache.getMsg(clientId);
 
@@ -102,6 +110,9 @@ const app = http.createServer((req, res) => {
     }
 
     if (/^\/keys/.test(req.url)) {
+        // 1) ============== 
+        console.log("1) CSS :active triggers request ", req.url);
+        // =================
         const segments = req.url.split('_');
         const letter = segments[2];
         const id = segments[1];

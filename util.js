@@ -2,13 +2,13 @@ export const idGenerator = function () {
   let id = 0;
   return () => `000${id++}`.slice(-3);
 };
-export const PORT = 8085;
+export const PORT = 4000;
 export const SEND_LETTER = '-';
 export const PRESS_EVENT = 'press-key';
 export const LETTERS = [
-  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 
-  's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
-  'z', 'x', 'c', 'v', 'b', 'n', 'm'
+  'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '/',
+  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
+  'z', 'x', 'c', 'v', 'b', 'n', 'm',
 ];
 export const INTRO_HTML = `
   <html>
@@ -20,6 +20,7 @@ export const INTRO_HTML = `
           font-family: sans-serif;
           background-color: #222222;
           color: #DDDDDD;
+          text-align: center;
         }
         a {
           color: rgb(243, 86, 39);
@@ -30,11 +31,14 @@ export const INTRO_HTML = `
           border-radius: 4px;
         }
         .keyboard {
-          display: flex;
-          flex-wrap: wrap;
-          width: 320px;
+          max-width: 320px;
           margin: auto;
-          justify-content: center;
+          display: grid;
+          align-items: center;
+          grid-template-areas:
+            "q w e r t y u i o p . ."
+            ". a s d f g h j k l . ."
+            ". . z x c v b n m . . .";
         }
       </style>
     </head>
@@ -61,7 +65,6 @@ export const STYLE_TEXT = `
         left: 10px;
     }
     .btn {
-        width: 40px;
         padding: 0;
         text-align: center;
         line-height: 20px;
