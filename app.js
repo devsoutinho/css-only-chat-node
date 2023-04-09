@@ -91,7 +91,7 @@ const app = http.createServer((req, res) => {
 
     if (/^\/send-/.test(req.url)) {
         // 2) ============== 
-        console.log("2) CSS :active on send sends the message", req.url);
+        // console.log("2) CSS :active on send sends the message", req.url);
         // =================
         const clientId = req.url.split('_')[1];
         const msg = cache.getMsg(clientId);
@@ -111,7 +111,7 @@ const app = http.createServer((req, res) => {
 
     if (/^\/keys/.test(req.url)) {
         // 1) ============== 
-        console.log("1) CSS :active triggers request ", req.url);
+        // console.log("1) CSS :active triggers request ", req.url);
         // =================
         const segments = req.url.split('_');
         const letter = segments[2];
